@@ -1,0 +1,159 @@
+<html>
+<head>
+    <title>Event Finder - Event Specifics</title>
+    <link rel="stylesheet" href="finalProject.css">
+    <style>
+        /*Inspo = https://www.w3schools.com/css/tryit.asp?filename=trycss_grid_layout_named*/
+
+        .item1 { grid-area: pics; }
+        .item2 { grid-area: name; }
+        .item3 { grid-area: info1; }
+        .item4 { grid-area: link; }
+        .item5 { grid-area: button; }
+        
+        body {
+            text-align: center;
+            background-color: rgb(230, 230, 230);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-areas:
+                'pics pics pics info1 info1 info1 info1 info1 info1'
+                'pics pics pics info1 info1 info1 info1 info1 info1'
+                'pics pics pics info1 info1 info1 info1 info1 info1'
+                'name name name info1 info1 info1 info1 info1 info1'
+                'link link link link link button button button button';
+            gap: 30px;
+            background-color: darkblue;
+            padding: 10px;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+        }
+
+        .grid-container > div {
+            background-color: rgb(230, 230, 230);
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1><header>About This Event!</header></h1>
+
+    <!-- Navigation Menu (KEEP SAME FOR EACH) -->
+    <nav id="main-nav">
+        <ul>
+            <li onclick="window.location='homeFormPage.html'"><strong>Home</strong></li>
+            <li onclick="window.location='about.html'"><strong>About</strong></li>
+            <li onclick="window.location= 'savedEvents.html'"><strong>Saved Events</strong></li>
+        </ul>
+    </nav>
+
+    <!--section organization -->
+    <div class="grid-container">
+        <div class="item1" id="eventImages"></div> <!--image (all images in array are the same just different sizes) -->
+        <div class="item2" id="eventTitle"></div> <!-- event name -->
+        <div class="item3" id="eventDetails"></div> <!-- info1 (date, price, venue location, genre) -->
+        <div class="item4" id="eventURL"></div> <!-- link -->
+        <div class="item5" id="appendButton"></div> <!-- button IMPLEMENT SUPABASE LATER - AJ -->
+    </div>
+</body>
+
+<script type="text/javascript">
+    // using local storage to load event id into API endpoint
+    const eventId = localStorage.getItem('selectedEventId');
+    console.log(`Event ID: ${eventId}`);
+
+    const apiKey = 'soA7AjtbzlJuGSh4GrwGE0XHmghpGATq';
+    const eventDetailsUrl = `https://app.ticketmaster.com/discovery/v2/events/${eventId}.json?apikey=${apiKey}`;
+    
+    // API Promise
+    async function loadDetailAPI() {
+        const response = await fetch(eventDetailsUrl);
+        const eventsData = await response.json();
+        return eventsData;
+    }
+    
+    // populate page dynamically with endpoint info
+    async function populatePage() {
+        const eventData = await loadDetailAPI();
+        console.log(eventData); 
+
+        // image (placeholder for Image Slider)
+        const imageArea = document.getElementById('eventImages');
+        if (eventData.images) {
+            imageArea.innerHTML = `<img src="${eventData.images[0].url}" alt="Event Image" class="center">`;
+        } else {imageArea.innerHTML = `<p>No images available for this event.</p>`;}
+
+        // event name
+        const titleArea = document.getElementById('eventTitle');
+        if (eventData.name) {
+            titleArea.innerHTML = `<h1>${eventData.name}</h1>`;
+        } else {
+            titleArea.innerHTML = `<h2>No title available for this event.</h2>`;}
+
+        // event details (date, price, venue, description)
+        const detailsArea = document.getElementById('eventDetails');
+
+        if (eventData.dates) { //If we get time we should turn this from ####-##-## to Month Day, Year
+            const startDate = eventData.dates.start.localDate;
+            dateInfo = `${startDate}`;} 
+        else {dateInfo = 'No date information for this event.'};
+
+        let priceRange = 'Price not available';
+        if (eventData.priceRanges) {
+            priceRange = `$${eventData.priceRanges[0].min} - $${eventData.priceRanges[0].max}`;};
+
+        let venue = 'Venue not specified for this event.';
+        if (eventData._embedded.venues) {
+            venue = eventData._embedded.venues[0].name;};
+
+        let time = 'Time not found.'; //If we get time we should turn this from military time to regular
+        if (eventData.dates.start.localTime) {
+            time = eventData.dates.start.localTime;};
+
+            let genre = 'No genre found for this event.';
+            if (eventData.classifications) {
+                genre = eventData.classifications[0].genre.name;};
+
+
+
+        detailsArea.innerHTML = `
+            <h2><strong><u>Date:</u></strong> ${dateInfo}</h2>
+            <h2><strong><u>Time:</u></strong> ${time}</h2> 
+            <h2><strong><u>Price:</u></strong> ${priceRange}</h2>
+            <h2><strong><u>Venue:</u></strong> ${venue}</h2>
+            <h2><strong><u>Genre:</u></strong> ${genre}</h2>`;
+
+        // link
+        const linkArea = document.getElementById('eventURL');
+        if (eventData.url) {
+            linkArea.innerHTML = `<a href='${eventData.url}'' target='_blank'><h1>Ticketmaster Event Link</h1></a>`;
+        } else {
+            linkArea.innerHTML = '<h2>No link available.</h2>';}
+
+        // button (placeholder until further JS) and make it custom CSS to make it nicer - AJ
+        const buttonArea = document.getElementById('appendButton');
+        const appendButton = document.createElement('button');
+        appendButton.textContent = 'Save Event'; 
+        buttonArea.appendChild(appendButton); 
+        //ONCLICK ADD AN ALERT THAT SAYS ITS SAVED SO PEOPLE DONT SPAM BUTTOM
+    }
+
+    window.onload = populatePage;
+</script>
+</html>

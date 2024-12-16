@@ -1,0 +1,136 @@
+<html>
+<head>
+    <title>Event Finder - About Page</title>
+    <link rel="stylesheet" href="finalProject.css">
+
+    <style>
+        .item1 { grid-area: what; }
+        .item2 { grid-area: how; }
+        .item3 { grid-area: api; }
+        .item4 { grid-area: troubleshoot; }
+
+        body {
+        height: 100%; 
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        background-color: rgb(230, 230, 230);
+        }
+
+        body > header{
+            text-align: center;
+            background-color: (230, 230, 230);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-areas:
+                'what how'
+                'api troubleshoot';
+                /*trying to get equal boxes*/
+            grid-template-rows: 1fr 1fr; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 10px;
+            background-color: darkblue;
+            width: 100%; 
+            height: 100%; 
+            }
+
+        .grid-container > div {
+            background-color: #e6e6e6;
+            display: flex;
+            flex-direction: column; 
+            justify-content: flex-start; 
+            align-items: center; 
+            padding: 10px;
+            border: 7px solid  darkblue; 
+            }
+
+        /*text boxes within the sub sections of the grids*/
+        .grid-container > div > div {
+            width: 80%; 
+            padding: 10px;
+            text-align: left;
+            box-sizing: border-box;
+            background-color: ivory;
+            }
+
+            .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            }
+
+
+    </style>
+</head>
+
+<body>
+    <header><h1>About Event Finder</h1></header>
+
+    <!-- Navigation Menu (KEEP SAME FOR EACH) -->
+    <nav id="main-nav">
+        <ul>
+            <li onclick="window.location='homeFormPage.html'"><strong>Home</strong></li>
+            <li onclick="window.location='about.html'"><strong>About</strong></li>
+            <li onclick="window.location= 'savedEvents.html'"><strong>Saved Events</strong></li>
+        </ul>
+    </nav>
+
+    <div class="grid-container">
+        <div class="item1"><h1><strong><u>What is Event Finder?</u></strong></h1>
+            <div>
+                <h3>
+                   With our app you can:
+                </h3>
+
+                <ul>
+                    <li>Find events meeting your criteria</li>
+                    <li>Explore opportunities you may have never looked into</li>
+                    <li>Have a centralized place for ticket information</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="item2"><h1><strong><u>How to Use Our App</u></strong></h1>
+            <div>
+                <h3>
+                    Start on the home page with the "Filters" section to select the things you want
+                    to narrow your search down by. That will populate the second form to fill, and submission
+                    of that form takes you to a chart of a few randomly picked events matching your criteria!
+                    Options to explore these events and their details in depth are available a seperate page.
+                </h3>
+            </div>
+        </div>
+
+        <div class="item3"><h1><strong><u>Ticketmaster API</u></strong></h1>
+            <br>
+            <div>
+                <h3>
+                    Ticketmaster's Discovery API allows users to filter and find events by searching attractions, events, or venues.
+                    Our app uses the event finding endpoint and uses the results in conjunction with the endpoint to get in depth details on each event. 
+                </h3>
+                <p><strong>Learn More Here:</strong></p>
+                <a href="https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/" class="center">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOyN3p3rIdRlxDKs1lz8enj2oPz1JeUbOYJw&s"
+                         alt="tmAPI" width="190" height="100"></a>
+            </div>
+        </div>
+
+        <div class="item4"><h1><strong><u>Use Our Voice Control Feature!</u></strong></h1>
+            <br>
+            <div>
+                <!--JORDAN-->
+                <h3>Commands:</h3>
+                <ul>
+                    <li>Say "navigate to __" to navigate to the page of your choice</li>
+                    <li>To select a filter, say "select" then the first word of the filter of choice (ex: "select family")</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
